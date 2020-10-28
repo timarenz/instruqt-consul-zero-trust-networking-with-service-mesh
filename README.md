@@ -1,1 +1,1 @@
-# insruqt-consul-zero-trust-networking-with-service-mesh
+# instruqt-consul-zero-trust-networking-with-service-mesh
