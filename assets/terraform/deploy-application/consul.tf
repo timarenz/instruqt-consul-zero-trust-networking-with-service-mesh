@@ -35,7 +35,7 @@ module "consul_server" {
 resource "random_uuid" "consul_master_token" {}
 
 module "consul_server_config" {
-  source             = "/Users/tim/Dropbox (Personal)/dev/terraform-modules/terraform-ssh-consul"
+  source             = "git::https://github.com/timarenz/terraform-ssh-consul.git?ref=v0.6.1"
   host               = module.consul_server.public_ip
   username           = var.ssh_username
   ssh_private_key    = tls_private_key.ssh.private_key_pem

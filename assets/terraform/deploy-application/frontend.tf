@@ -87,7 +87,7 @@ data "consul_acl_token_secret_id" "frontend_service" {
 
 module "frontend_server_consul" {
   depends_on         = [consul_acl_token.frontend_server]
-  source             = "/Users/tim/Dropbox (Personal)/dev/terraform-modules/terraform-ssh-consul"
+  source             = "git::https://github.com/timarenz/terraform-ssh-consul.git?ref=v0.6.1"
   host               = module.frontend_server.public_ip
   username           = var.ssh_username
   ssh_private_key    = tls_private_key.ssh.private_key_pem
