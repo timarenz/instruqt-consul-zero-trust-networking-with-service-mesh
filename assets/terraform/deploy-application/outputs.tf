@@ -69,3 +69,7 @@ output "ssh_username" {
 output "consul_primary_dc" {
   value = var.consul_primary_dc
 }
+
+output "consul_http_addr" {
+  value = local.consul_http_addr
+}
