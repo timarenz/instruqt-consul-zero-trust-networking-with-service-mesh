@@ -145,13 +145,13 @@ resource "consul_acl_auth_method" "oidc" {
   max_token_ttl = "60m"
   config_json = jsonencode({
     "VerboseOIDCLogging" : true,
-    "OIDCDiscoveryURL" : "${local.oidc_discovery_url}",
+    "OIDCDiscoveryURL" : local.oidc_discovery_url,
     "OIDCClientID" : "foo",
     "OIDCClientSecret" : "bar",
     "BoundAudiences" : ["foo"],
     "AllowedRedirectURIs" : [
-      "${local.oidc_redirect_urls[0]}",
-      "${local.oidc_redirect_urls[1]}"
+      local.oidc_redirect_urls[0],
+      local.oidc_redirect_urls[1]
     ],
     "ClaimMappings" : {
       "name" : "first_name",
