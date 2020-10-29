@@ -14,7 +14,8 @@ locals {
   consul_server_tag  = "consul-server"
   oidc_server_tag    = "oidc-server"
   oidc_discovery_url = "http://${module.oidc_server.public_ip}:9000"
-  oidc_redirect_urls = ["http://${module.consul_server.public_ip}:8500/ui/oidc/callback", "http://localhost:8550/oidc/callback"]
+  oidc_redirect_urls = ["${local.consul_http_addr}/ui/oidc/callback", "http://localhost:8550/oidc/callback"]
+  consul_http_addr   = "http://${module.consul_server.public_ip}:8500"
 }
 
 resource "local_file" "ssh" {
