@@ -6,6 +6,12 @@ data "terraform_remote_state" "base" {
   }
 }
 
+provider "google" {
+  project     = data.terraform_remote_state.base.outputs.gcp_project
+  region      = data.terraform_remote_state.base.outputs.gcp_region
+  credentials = file(var.gcp_credentials)
+}
+
 locals {
   oidc_server_tag    = "oidc-server"
   oidc_discovery_url = "http://${module.oidc_server.public_ip}:9000"
