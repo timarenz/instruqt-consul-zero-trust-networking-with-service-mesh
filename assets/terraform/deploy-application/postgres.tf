@@ -98,7 +98,7 @@ module "postgres_server_consul" {
   grpc_port          = 8502
   datacenter         = var.consul_primary_dc
   primary_datacenter = var.consul_primary_dc
-  consul_version     = "1.8.4+ent"
+  consul_version     = var.consul_version
   acl                = true
   agent_token        = data.consul_acl_token_secret_id.postgres_server.secret_id
 }
@@ -113,7 +113,7 @@ resource "null_resource" "postgres_server" {
   }
 
   provisioner "remote-exec" {
-    script = "${path.module}/scripts/install-docker.sh"
+    script = "${path.module}/../../scripts/install-docker.sh"
   }
 
   provisioner "file" {

@@ -23,9 +23,13 @@ variable "owner_name" {
 
 variable "ssh_username" {
   type    = string
-  default = "jeff"
+  default = "consul-admin"
 }
 
 variable "consul_primary_dc" {
   default = "on-prem"
+}
+
+variable "consul_version" {
+  default = "1.8.5+ent"
 }

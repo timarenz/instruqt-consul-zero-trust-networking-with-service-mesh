@@ -62,12 +62,52 @@ output "ssh_private_key" {
   value = tls_private_key.ssh.private_key_pem
 }
 
+output "ssh_public_key" {
+  value = tls_private_key.ssh.public_key_openssh
+}
+
 output "ssh_username" {
   value = var.ssh_username
 }
 
+output "consul_server_tag" {
+  value = local.consul_server_tag
+}
+
 output "consul_primary_dc" {
   value = var.consul_primary_dc
+}
+
+output "consul_http_addr" {
+  value = local.consul_http_addr
+}
+
+output "consul_version" {
+  value = var.consul_version
+}
+
+output "gcp_project" {
+  value = module.gcp.gcp_project
+}
+
+output "gcp_region" {
+  value = module.gcp.gcp_region
+}
+
+output "gcp_network" {
+  value = module.gcp.network
+}
+
+output "gcp_subnet" {
+  value = module.gcp.subnets[0]
+}
+
+output "environment_name" {
+  value = var.environment_name
+}
+
+output "owner_name" {
+  value = var.owner_name
 }
 
 output "consul_http_addr" {

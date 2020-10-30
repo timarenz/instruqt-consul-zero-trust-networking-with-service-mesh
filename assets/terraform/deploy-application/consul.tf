@@ -45,7 +45,7 @@ module "consul_server_config" {
   datacenter         = var.consul_primary_dc
   primary_datacenter = var.consul_primary_dc
   bootstrap_expect   = 1
-  consul_version     = "1.8.4+ent"
+  consul_version     = var.consul_version
   acl                = true
   master_token       = random_uuid.consul_master_token.result
   agent_token        = random_uuid.consul_master_token.result
