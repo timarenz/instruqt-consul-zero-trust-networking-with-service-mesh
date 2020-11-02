@@ -87,11 +87,11 @@ output "consul_version" {
 }
 
 output "gcp_project" {
-  value = module.gcp.gcp_project
+  value = module.gcp.project_id
 }
 
 output "gcp_region" {
-  value = module.gcp.gcp_region
+  value = module.gcp.region
 }
 
 output "gcp_network" {
