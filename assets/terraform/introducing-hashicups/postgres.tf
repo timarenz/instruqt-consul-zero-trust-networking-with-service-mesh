@@ -113,7 +113,7 @@ resource "null_resource" "postgres_server" {
   }
 
   provisioner "remote-exec" {
-    script = "${path.module}/../../scripts/install-docker.sh"
+    script = "${path.module}/scripts/install-docker.sh"
   }
 
   provisioner "file" {

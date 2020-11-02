@@ -112,7 +112,7 @@ resource "null_resource" "frontend_server" {
   }
 
   provisioner "remote-exec" {
-    script = "${path.module}/../../scripts/install-docker.sh"
+    script = "${path.module}/scripts/install-docker.sh"
   }
 
   provisioner "file" {
