@@ -35,20 +35,21 @@ module "consul_server" {
 resource "random_uuid" "consul_master_token" {}
 
 module "consul_server_config" {
-  source             = "git::https://github.com/timarenz/terraform-ssh-consul.git?ref=v0.6.1"
-  host               = module.consul_server.public_ip
-  username           = var.ssh_username
-  ssh_private_key    = tls_private_key.ssh.private_key_pem
-  retry_join         = ["provider=gce project_name=${var.gcp_project} tag_value=${local.consul_server_tag} zone_pattern=${var.gcp_region}-.*"]
-  connect            = true
-  advertise_addr     = module.consul_server.private_ip
-  datacenter         = var.consul_primary_dc
-  primary_datacenter = var.consul_primary_dc
-  bootstrap_expect   = 1
-  consul_version     = var.consul_version
-  acl                = true
-  master_token       = random_uuid.consul_master_token.result
-  agent_token        = random_uuid.consul_master_token.result
+  source                             = "git::https://github.com/timarenz/terraform-ssh-consul.git?ref=v0.6.2"
+  host                               = module.consul_server.public_ip
+  username                           = var.ssh_username
+  ssh_private_key                    = tls_private_key.ssh.private_key_pem
+  retry_join                         = ["provider=gce project_name=${var.gcp_project} tag_value=${local.consul_server_tag} zone_pattern=${var.gcp_region}-.*"]
+  connect                            = true
+  advertise_addr                     = module.consul_server.private_ip
+  datacenter                         = var.consul_primary_dc
+  primary_datacenter                 = var.consul_primary_dc
+  bootstrap_expect                   = 1
+  consul_version                     = var.consul_version
+  acl                                = true
+  master_token                       = random_uuid.consul_master_token.result
+  agent_token                        = random_uuid.consul_master_token.result
+  enable_mesh_gateway_wan_federation = true
 }
 
 provider "consul" {

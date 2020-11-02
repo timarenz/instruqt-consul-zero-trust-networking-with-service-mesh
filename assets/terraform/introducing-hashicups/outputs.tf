@@ -98,6 +98,10 @@ output "gcp_subnet" {
   value = module.gcp.subnets[0]
 }
 
+output "gcp_credentials" {
+  value = var.gcp_credentials
+}
+
 output "environment_name" {
   value = var.environment_name
 }
