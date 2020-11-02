@@ -34,7 +34,7 @@ module "oidc_server" {
 
 provider "consul" {
   address    = data.terraform_remote_state.base.outputs.consul_http_addr
-  token      = data.terraform_remote_state.base.outputs.consul_mater_token
+  token      = data.terraform_remote_state.base.outputs.consul_master_token
   datacenter = data.terraform_remote_state.base.outputs.consul_primary_dc
 }
 
@@ -134,7 +134,7 @@ resource "null_resource" "oidc_server" {
   provisioner "remote-exec" {
     inline = [
       "chmod +x setup-oidc.sh",
-      "sudo CONSUL_HTTP_TOKEN=${data.terraform_remote_state.base.outputs.consul_mater_token} CONSUL_SERVICE_TOKEN=${data.consul_acl_token_secret_id.oidc_service.secret_id} ./setup-oidc.sh"
+      "sudo CONSUL_HTTP_TOKEN=${data.terraform_remote_state.base.outputs.consul_master_token} CONSUL_SERVICE_TOKEN=${data.consul_acl_token_secret_id.oidc_service.secret_id} ./setup-oidc.sh"
     ]
   }
 }
