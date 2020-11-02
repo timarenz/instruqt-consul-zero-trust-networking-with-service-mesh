@@ -6,10 +6,6 @@ output "frontend_server_public_ip" {
   value = module.frontend_server.public_ip
 }
 
-output "oidc_server_public_ip" {
-  value = module.oidc_server.public_ip
-}
-
 output "postgres_server_public_ip" {
   value = module.postgres_server.public_ip
 }
