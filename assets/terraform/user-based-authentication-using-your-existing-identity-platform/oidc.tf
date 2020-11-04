@@ -140,7 +140,7 @@ resource "null_resource" "oidc_server" {
 }
 
 resource "consul_acl_auth_method" "oidc" {
-  depends_on    = [null_resource.oidc_server.module.oidc_server_firewall]
+  depends_on    = [null_resource.oidc_server, module.oidc_server_firewall]
   name          = "auth_method"
   type          = "oidc"
   max_token_ttl = "60m"
