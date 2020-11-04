@@ -3,7 +3,7 @@ module "oidc_server_firewall" {
   project          = data.terraform_remote_state.base.outputs.gcp_project
   environment_name = data.terraform_remote_state.base.outputs.environment_name
   name             = "oidc-server"
-  network          = data.terraform_remote_state.base.outputs.network
+  network          = data.terraform_remote_state.base.outputs.gcp_network
   allow_rules = [{
     protocol = "tcp"
     ports    = ["9000"]
