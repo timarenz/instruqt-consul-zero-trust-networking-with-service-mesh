@@ -131,8 +131,8 @@ resource "null_resource" "mesh_gateway" {
 
   provisioner "remote-exec" {
     inline = [
-      "chmod +x setup-mesh-gateway",
-      "sudo CONSUL_SERVICE_TOKEN=${data.consul_acl_token_secret_id.mesh_gateway_service.secret_id}  MESH_GATEWAY_PRIVATE_IP=${module.mesh_gateway.private_ip} MESH_GATEWAY_PUBLIC_IP=${module.mesh_gateway.public_ip} ./setup-mesh-gateway"
+      "chmod +x setup-mesh-gateway.sh",
+      "sudo CONSUL_SERVICE_TOKEN=${data.consul_acl_token_secret_id.mesh_gateway_service.secret_id}  MESH_GATEWAY_PRIVATE_IP=${module.mesh_gateway.private_ip} MESH_GATEWAY_PUBLIC_IP=${module.mesh_gateway.public_ip} ./setup-mesh-gateway.sh"
     ]
   }
 }

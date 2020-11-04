@@ -3,7 +3,7 @@ module "oidc_server_firewall" {
   project          = data.terraform_remote_state.base.outputs.gcp_project
   environment_name = data.terraform_remote_state.base.outputs.environment_name
   name             = "oidc-server"
-  network          = data.terraform_remote_state.base.outputs.environment_name
+  network          = data.terraform_remote_state.base.outputs.network
   allow_rules = [{
     protocol = "tcp"
     ports    = ["9000"]
@@ -140,7 +140,7 @@ resource "null_resource" "oidc_server" {
 }
 
 resource "consul_acl_auth_method" "oidc" {
-  depends_on    = [null_resource.oidc_server]
+  depends_on    = [null_resource.oidc_server.module.oidc_server_firewall]
   name          = "auth_method"
   type          = "oidc"
   max_token_ttl = "60m"
