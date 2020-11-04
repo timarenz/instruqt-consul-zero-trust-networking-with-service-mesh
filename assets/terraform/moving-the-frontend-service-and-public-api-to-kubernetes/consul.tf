@@ -55,6 +55,16 @@ resource "kubernetes_namespace" "consul" {
   }
 }
 
+provider "helm" {
+  kubernetes {
+    host                   = module.k8s.endpoint
+    cluster_ca_certificate = module.k8s.cluster_ca_certificate
+    token                  = data.google_client_config.client.access_token
+
+    load_config_file = false
+  }
+}
+
 resource "helm_release" "consul" {
   depends_on = [module.k8s]
   provider   = helm

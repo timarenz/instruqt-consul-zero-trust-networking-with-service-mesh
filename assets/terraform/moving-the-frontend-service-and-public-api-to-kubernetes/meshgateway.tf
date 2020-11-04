@@ -6,7 +6,7 @@ module "mesh_gateway_firewall" {
   project          = data.terraform_remote_state.base.outputs.gcp_project
   environment_name = data.terraform_remote_state.base.outputs.environment_name
   name             = "mesh-gateway"
-  network          = data.terraform_remote_state.base.outputs.environment_name
+  network          = data.terraform_remote_state.base.outputs.gcp_project
   allow_rules = [{
     protocol = "tcp"
     ports    = ["8443"]
@@ -56,7 +56,7 @@ data "consul_acl_token_secret_id" "mesh_gateway" {
 }
 
 resource "consul_acl_policy" "mesh_gateway_service" {
-  name  = "mesh-gateway"
+  name  = "mesh-gateway-service"
   rules = <<-RULE
     service "mesh-gateway" {
         policy = "write"
@@ -84,16 +84,16 @@ data "consul_acl_token_secret_id" "mesh_gateway_service" {
   accessor_id = consul_acl_token.mesh_gateway_service.id
 }
 
-resource "consul_config_entry" "mesh_gateway" {
-  name = "proxy-defaults"
-  kind = "global"
+# resource "consul_config_entry" "mesh_gateway" {
+#   name = "proxy-defaults"
+#   kind = "global"
 
-  config_json = jsonencode({
-    MeshGateway = {
-      Mode = "local"
-    }
-  })
-}
+#   config_json = jsonencode({
+#     MeshGateway = {
+#       Mode = "local"
+#     }
+#   })
+# }
 
 module "mesh_gateway_consul" {
   source             = "git::https://github.com/timarenz/terraform-ssh-consul.git?ref=v0.6.2"
