@@ -114,11 +114,6 @@ resource "helm_release" "consul" {
   }
 
   set {
-    name  = "global.tls.httpsOnly"
-    value = false
-  }
-
-  set {
     name  = "global.tls.caCert.secretName"
     value = kubernetes_secret.consul_federation.metadata[0].name
   }

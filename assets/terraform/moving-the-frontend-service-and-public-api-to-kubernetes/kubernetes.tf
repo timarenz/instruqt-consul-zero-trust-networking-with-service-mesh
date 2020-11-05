@@ -24,3 +24,8 @@ provider "kubernetes" {
 
   load_config_file = false
 }
+
+resource "local_file" "kubeconfig" {
+  content  = module.k8s.kubeconfig
+  filename = "${path.cwd}/kubeconfig.yaml"
+}
