@@ -74,6 +74,9 @@ module "consul_server_config" {
   cert_file                          = module.root_ca.cert
   key_file                           = module.root_ca.private_key
   auto_encrypt                       = true
+  verify_incoming                    = true
+  verify_outgoing                    = true
+  verify_server_hostname             = true
 }
 
 provider "consul" {
