@@ -71,8 +71,8 @@ module "consul_server_config" {
   enable_mesh_gateway_wan_federation = true
   encryption_key                     = random_id.consul_gossip_encryption_key.b64_std
   ca_file                            = module.root_ca.cert
-  cert_file                          = module.root_ca.cert
-  key_file                           = module.root_ca.private_key
+  cert_file                          = module.consul_server_cert.cert
+  key_file                           = module.consul_server_cert.private_key
   auto_encrypt                       = true
   verify_incoming                    = true
   verify_outgoing                    = true
