@@ -87,26 +87,26 @@ data "consul_acl_token_secret_id" "postgres_service" {
 
 
 module "postgres_server_consul" {
-  depends_on             = [consul_acl_token.postgres_server]
-  source                 = "git::https://github.com/timarenz/terraform-ssh-consul.git?ref=v0.6.1"
-  host                   = module.postgres_server.public_ip
-  username               = var.ssh_username
-  ssh_private_key        = tls_private_key.ssh.private_key_pem
-  agent_type             = "client"
-  retry_join             = ["provider=gce project_name=${var.gcp_project} tag_value=${local.consul_server_tag} zone_pattern=${var.gcp_region}-.*"]
-  advertise_addr         = module.postgres_server.private_ip
-  grpc_port              = 8502
-  datacenter             = var.consul_primary_dc
-  primary_datacenter     = var.consul_primary_dc
-  consul_version         = var.consul_version
-  acl                    = true
-  agent_token            = data.consul_acl_token_secret_id.postgres_server.secret_id
-  encryption_key         = random_id.consul_gossip_encryption_key.b64_std
-  auto_encrypt           = true
-  ca_file                = module.root_ca.cert
-  verify_incoming        = false
-  verify_outgoing        = true
-  verify_server_hostname = true
+  depends_on         = [consul_acl_token.postgres_server]
+  source             = "git::https://github.com/timarenz/terraform-ssh-consul.git?ref=v0.6.1"
+  host               = module.postgres_server.public_ip
+  username           = var.ssh_username
+  ssh_private_key    = tls_private_key.ssh.private_key_pem
+  agent_type         = "client"
+  retry_join         = ["provider=gce project_name=${var.gcp_project} tag_value=${local.consul_server_tag} zone_pattern=${var.gcp_region}-.*"]
+  advertise_addr     = module.postgres_server.private_ip
+  grpc_port          = 8502
+  datacenter         = var.consul_primary_dc
+  primary_datacenter = var.consul_primary_dc
+  consul_version     = var.consul_version
+  acl                = true
+  agent_token        = data.consul_acl_token_secret_id.postgres_server.secret_id
+  encryption_key     = random_id.consul_gossip_encryption_key.b64_std
+  # auto_encrypt           = true
+  # ca_file                = module.root_ca.cert
+  # verify_incoming        = false
+  # verify_outgoing        = true
+  # verify_server_hostname = true
 }
 
 resource "null_resource" "postgres_server" {
