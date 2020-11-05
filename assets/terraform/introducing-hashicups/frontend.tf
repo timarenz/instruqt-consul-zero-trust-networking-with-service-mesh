@@ -100,6 +100,8 @@ module "frontend_server_consul" {
   consul_version     = var.consul_version
   acl                = true
   agent_token        = data.consul_acl_token_secret_id.frontend_server.secret_id
+  encryption_key     = random_id.consul_gossip_encryption_key.b64_std
+  auto_encrypt       = true
 }
 
 resource "null_resource" "frontend_server" {

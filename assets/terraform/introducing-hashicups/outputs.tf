@@ -109,3 +109,15 @@ output "environment_name" {
 output "owner_name" {
   value = var.owner_name
 }
+
+output "consul_gossip_encryption_key" {
+  value = random_id.consul_gossip_encryption_key.b64_std
+}
+
+output "ca_cert" {
+  value = module.root_ca.cert
+}
+
+output "ca_private_key" {
+  value = module.root_ca.private_key
+}

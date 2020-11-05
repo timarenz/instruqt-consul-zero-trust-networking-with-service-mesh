@@ -34,6 +34,25 @@ module "consul_server" {
 
 resource "random_uuid" "consul_master_token" {}
 
+resource "random_id" "consul_gossip_encryption_key" {
+  byte_length = 32
+}
+
+module "consul_server_cert" {
+  source                  = "git::https://github.com/timarenz/terraform-tls-certificate?ref=v0.2.0"
+  private_key_algorithm   = "ECDSA"
+  private_key_ecdsa_curve = "P256"
+  ca_cert                 = module.root_ca.cert
+  ca_key                  = module.root_ca.private_key
+  ca_key_algorithm        = module.root_ca.key_algorithm
+  organization_name       = "Tim Arenz"
+  common_name             = "server.on-prem.consul"
+  allowed_uses            = ["key_encipherment", "digital_signature", "server_auth", "client_auth"]
+  dns_names               = ["localhost"]
+  ip_addresses            = ["127.0.0.1", module.consul_server.public_ip, module.consul_server.private_ip]
+}
+
+
 module "consul_server_config" {
   source                             = "git::https://github.com/timarenz/terraform-ssh-consul.git?ref=v0.6.2"
   host                               = module.consul_server.public_ip
@@ -50,6 +69,11 @@ module "consul_server_config" {
   master_token                       = random_uuid.consul_master_token.result
   agent_token                        = random_uuid.consul_master_token.result
   enable_mesh_gateway_wan_federation = true
+  encryption_key                     = random_id.consul_gossip_encryption_key.b64_std
+  ca_file                            = module.root_ca.cert
+  cert_file                          = module.root_ca.cert
+  key_file                           = module.root_ca.private_key
+  auto_encrypt                       = true
 }
 
 provider "consul" {

@@ -38,14 +38,17 @@ data "consul_acl_token_secret_id" "replication" {
   accessor_id = consul_acl_token.replication.id
 }
 
-resource "kubernetes_secret" "consul" {
+resource "kubernetes_secret" "consul_federation" {
   metadata {
-    name      = "consul"
+    name      = "consul-federation"
     namespace = kubernetes_namespace.consul.metadata[0].name
   }
 
   data = {
-    replicationToken = data.consul_acl_token_secret_id.replication.secret_id
+    gossipEncryptionKey = data.terraform_remote_state.base.consul_gossip_encryption_key
+    caCert              = data.consul_acl_token_secret_id.replication.ca_cert
+    caKey               = data.consul_acl_token_secret_id.replication.ca_private_key
+    replicationToken    = data.consul_acl_token_secret_id.replication.secret_id
   }
 }
 
@@ -96,6 +99,51 @@ resource "helm_release" "consul" {
   }
 
   set {
+    name  = "global.gossipEncryption.secretName"
+    value = kubernetes_secret.consul_federation.metadata[0].name
+  }
+
+  set {
+    name  = "global.gossipEncryption.secretKey"
+    value = "gossipEncryptionKey"
+  }
+
+  set {
+    name  = "global.tls.enabled"
+    value = true
+  }
+
+  set {
+    name  = "global.tls.enableAutoEncrypt"
+    value = true
+  }
+
+  set {
+    name  = "global.tls.httpsOnly"
+    value = false
+  }
+
+  set {
+    name  = "global.tls.caCert.secretName"
+    value = kubernetes_secret.consul_federation.metadata[0].name
+  }
+
+  set {
+    name  = "global.tls.caCert.secretKey"
+    value = "caCert"
+  }
+
+  set {
+    name  = "global.tls.caKey.secretName"
+    value = kubernetes_secret.consul_federation.metadata[0].name
+  }
+
+  set {
+    name  = "global.tls.caKey.secretKey"
+    value = "caKey"
+  }
+
+  set {
     name  = "global.enableConsulNamespaces"
     value = true
   }
@@ -107,7 +155,7 @@ resource "helm_release" "consul" {
 
   set {
     name  = "global.acls.replicationToken.secretName"
-    value = kubernetes_secret.consul.metadata[0].name
+    value = kubernetes_secret.consul_federation.metadata[0].name
   }
 
   set {
@@ -120,16 +168,51 @@ resource "helm_release" "consul" {
     value = true
   }
 
+  set {
+    name  = "syncCatalog.enabled"
+    value = true
+  }
 
-  # values = [<<EOF
-  # server:
-  #   extraConfig: |
-  #     { "log_level"   : "TRACE" }
-  # client:
-  #   extraConfig: |
-  #     { "log_level"   : "TRACE" }
-  # EOF
-  # ]
+  set {
+    name  = "syncCatalog.default"
+    value = false
+  }
+
+  set {
+    name  = "syncCatalog.consulNamespaces.mirroringK8S"
+    value = true
+  }
+
+  set {
+    name  = "syncCatalog.addK8SNamespaceSuffix"
+    value = false
+  }
+
+  set {
+    name  = "connectInject.enabled"
+    value = true
+  }
+
+  set {
+    name  = "connectInject.centralConfig.enabled"
+    value = true
+  }
+
+  set {
+    name  = "connectInject.consulNamespaces.mirroringK8S"
+    value = true
+  }
+
+  values = [<<EOF
+  server:
+    extraConfig: |
+      {
+        "log_level"   : "TRACE",
+        "primary_datacenter": "on-prem",
+        "primary_gateways": ["${module.mesh_gateway.public_ip}"]
+      }
+  EOF
+  ]
 }
 
 

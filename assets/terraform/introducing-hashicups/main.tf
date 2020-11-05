@@ -34,3 +34,12 @@ module "gcp" {
     }
   ]
 }
+
+module "root_ca" {
+  source                  = "git::https://github.com/timarenz/terraform-tls-root-ca.git?ref=v0.2.1"
+  private_key_algorithm   = "ECDSA"
+  private_key_ecdsa_curve = "P256"
+  organization_name       = "HashiCorp Example"
+  common_name             = "Root CA"
+  allowed_uses            = ["digital_signature", "cert_signing", "crl_signing"]
+}

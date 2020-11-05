@@ -109,6 +109,8 @@ module "mesh_gateway_consul" {
   consul_version     = data.terraform_remote_state.base.outputs.consul_version
   acl                = true
   agent_token        = data.consul_acl_token_secret_id.mesh_gateway.secret_id
+  encryption_key     = data.terraform_remote_state.base.outputs.consul_gossip_encryption_key
+  auto_encrypt       = true
 }
 
 resource "null_resource" "mesh_gateway" {
