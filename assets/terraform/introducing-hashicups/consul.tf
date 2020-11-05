@@ -48,7 +48,7 @@ module "consul_server_cert" {
   organization_name       = "Tim Arenz"
   common_name             = "server.on-prem.consul"
   allowed_uses            = ["key_encipherment", "digital_signature", "server_auth", "client_auth"]
-  dns_names               = ["localhost"]
+  dns_names               = ["localhost", "consul-server.server.${var.consul_primary_dc}.consul"]
   ip_addresses            = ["127.0.0.1", module.consul_server.public_ip, module.consul_server.private_ip]
 }
 
