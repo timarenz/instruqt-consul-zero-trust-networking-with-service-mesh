@@ -6,7 +6,7 @@ module "mesh_gateway_firewall" {
   project          = data.terraform_remote_state.base.outputs.gcp_project
   environment_name = data.terraform_remote_state.base.outputs.environment_name
   name             = "mesh-gateway"
-  network          = data.terraform_remote_state.base.outputs.gcp_project
+  network          = data.terraform_remote_state.base.outputs.gcp_network
   allow_rules = [{
     protocol = "tcp"
     ports    = ["8443"]

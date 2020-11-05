@@ -38,6 +38,12 @@ data "consul_acl_token_secret_id" "replication" {
   accessor_id = consul_acl_token.replication.id
 }
 
+resource "kubernetes_namespace" "consul" {
+  metadata {
+    name = "consul"
+  }
+}
+
 resource "kubernetes_secret" "consul_federation" {
   metadata {
     name      = "consul-federation"
@@ -45,16 +51,10 @@ resource "kubernetes_secret" "consul_federation" {
   }
 
   data = {
-    gossipEncryptionKey = data.terraform_remote_state.base.consul_gossip_encryption_key
-    caCert              = data.consul_acl_token_secret_id.replication.ca_cert
-    caKey               = data.consul_acl_token_secret_id.replication.ca_private_key
+    gossipEncryptionKey = data.terraform_remote_state.base.outputs.consul_gossip_encryption_key
+    caCert              = data.terraform_remote_state.base.outputs.ca_cert
+    caKey               = data.terraform_remote_state.base.outputs.ca_private_key
     replicationToken    = data.consul_acl_token_secret_id.replication.secret_id
-  }
-}
-
-resource "kubernetes_namespace" "consul" {
-  metadata {
-    name = "consul"
   }
 }
 
