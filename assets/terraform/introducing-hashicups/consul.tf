@@ -73,11 +73,11 @@ module "consul_server_config" {
   ca_file                            = module.root_ca.cert
   cert_file                          = module.consul_server_cert.cert
   key_file                           = module.consul_server_cert.private_key
-#   auto_encrypt                       = true
-#   verify_incoming                    = true
-#   verify_outgoing                    = true
-#   verify_server_hostname             = true
-# }
+  #   auto_encrypt                       = true
+  #   verify_incoming                    = true
+  #   verify_outgoing                    = true
+  #   verify_server_hostname             = true
+}
 
 provider "consul" {
   address    = "http://${module.consul_server.public_ip}:8500"
