@@ -204,7 +204,7 @@ resource "helm_release" "consul" {
       {
         "log_level": "TRACE",
         "primary_datacenter": "on-prem",
-        "primary_gateways": ["${module.mesh_gateway.public_ip}"]
+        "primary_gateways": ["${module.mesh_gateway.public_ip}:8443"]
       }
   EOF
   ]
