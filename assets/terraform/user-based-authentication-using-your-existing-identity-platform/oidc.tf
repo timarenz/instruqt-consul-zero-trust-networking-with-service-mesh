@@ -102,6 +102,7 @@ module "oidc_server_consul" {
   consul_version     = data.terraform_remote_state.base.outputs.consul_version
   acl                = true
   agent_token        = data.consul_acl_token_secret_id.oidc_server.secret_id
+  encryption_key     = random_id.consul_gossip_encryption_key.b64_std
 }
 
 resource "null_resource" "oidc_server" {

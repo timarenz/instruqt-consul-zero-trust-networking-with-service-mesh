@@ -114,11 +114,6 @@ resource "helm_release" "consul" {
   }
 
   set {
-    name  = "global.tls.enableAutoEncrypt"
-    value = true
-  }
-
-  set {
     name  = "global.tls.httpsOnly"
     value = false
   }
@@ -203,11 +198,16 @@ resource "helm_release" "consul" {
     value = true
   }
 
+  set {
+    name  = "meshGateway.enabled"
+    value = true
+  }
+
   values = [<<EOF
   server:
     extraConfig: |
       {
-        "log_level"   : "TRACE",
+        "log_level": "TRACE",
         "primary_datacenter": "on-prem",
         "primary_gateways": ["${module.mesh_gateway.public_ip}"]
       }
