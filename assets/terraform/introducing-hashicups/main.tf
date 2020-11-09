@@ -12,8 +12,9 @@ resource "tls_private_key" "ssh" {
 }
 
 locals {
-  consul_server_tag = "consul-server"
-  consul_http_addr  = "http://${module.consul_server.public_ip}:8500"
+  consul_server_tag   = "consul-server"
+  consul_http_addr    = "http://${module.consul_server.public_ip}:8500"
+  frontend_server_tag = "frontend-server"
 }
 
 resource "local_file" "ssh" {

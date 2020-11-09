@@ -1,3 +1,16 @@
+module "frontend_server_firewall" {
+  source           = "git::https://github.com/timarenz/terraform-google-firewall.git?ref=v0.1.1"
+  project          = var.gcp_project
+  environment_name = var.environment_name
+  name             = "frontend-server"
+  network          = module.gcp.network
+  allow_rules = [{
+    protocol = "tcp"
+    ports    = ["80"]
+  }]
+  target_tags = [local.frontend_server_tag]
+}
+
 module "frontend_server" {
   source           = "git::https://github.com/timarenz/terraform-google-virtual-machine.git?ref=v0.2.3"
   project          = var.gcp_project
@@ -8,6 +21,7 @@ module "frontend_server" {
   subnet           = module.gcp.subnets[0]
   username         = var.ssh_username
   ssh_public_key   = tls_private_key.ssh.public_key_openssh
+  network_tags     = [local.frontend_server_tag]
   access_scopes = [
     "https://www.googleapis.com/auth/devstorage.read_only",
     "https://www.googleapis.com/auth/logging.write",

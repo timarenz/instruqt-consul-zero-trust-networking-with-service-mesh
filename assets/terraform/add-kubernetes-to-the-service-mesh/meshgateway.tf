@@ -84,16 +84,16 @@ data "consul_acl_token_secret_id" "mesh_gateway_service" {
   accessor_id = consul_acl_token.mesh_gateway_service.id
 }
 
-# resource "consul_config_entry" "mesh_gateway" {
-#   name = "proxy-defaults"
-#   kind = "global"
+resource "consul_config_entry" "proxy_defaults" {
+  kind = "proxy-defaults"
+  name = "global"
 
-#   config_json = jsonencode({
-#     MeshGateway = {
-#       Mode = "local"
-#     }
-#   })
-# }
+  config_json = jsonencode({
+    MeshGateway = {
+      Mode = "local"
+    }
+  })
+}
 
 module "mesh_gateway_consul" {
   source             = "git::https://github.com/timarenz/terraform-ssh-consul.git?ref=v0.6.2"
