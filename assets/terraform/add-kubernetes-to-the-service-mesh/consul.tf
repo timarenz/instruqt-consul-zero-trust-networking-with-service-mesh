@@ -198,6 +198,16 @@ resource "helm_release" "consul" {
     value = true
   }
 
+  # set {
+  #   name  = "ingressGateways.enabled"
+  #   value = true
+  # }
+
+  # set {
+  #   name  = "ingressGateways.defaults.service.type"
+  #   value = LoadBalancer
+  # }
+
   values = [<<EOF
   server:
     extraConfig: |
