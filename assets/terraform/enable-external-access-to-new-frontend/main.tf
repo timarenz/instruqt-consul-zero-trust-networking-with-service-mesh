@@ -53,4 +53,5 @@ resource "consul_intention" "ingress_to_frontend" {
   source_namespace      = "default"
   destination_name      = "frontend"
   destination_namespace = "frontend-team"
+  action                = "allow"
 }
