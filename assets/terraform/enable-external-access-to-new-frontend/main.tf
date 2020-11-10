@@ -40,9 +40,17 @@ provider "kubernetes" {
   config_path = data.terraform_remote_state.k8s.outputs.kubeconfig_file
 }
 
-data "kubernetes_service" "example" {
+data "kubernetes_service" "consul_ingress_gateway" {
   metadata {
     name      = "consul-ingress-gateway"
     namespace = data.terraform_remote_state.k8s.outputs.kubernetes_namespaces_consul
   }
+}
+
+resource "consul_intention" "ingress_to_frontend" {
+  count                 = var.solve == true ? 1 : 0
+  source_name           = "ingress-gateway"
+  source_namespace      = "default"
+  destination_name      = "frontend"
+  destination_namespace = "frontend-team"
 }

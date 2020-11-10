@@ -14,14 +14,6 @@ resource "consul_namespace" "db" {
   description = "Namespace for db-team managing the db services"
 }
 
-# resource "consul_intention" "default" {
-#   source_name           = "*"
-#   source_namespace      = "*"
-#   destination_name      = "*"
-#   destination_namespace = "*"
-#   action                = "deny"
-# }
-
 resource "consul_intention" "api" {
   source_name           = "*"
   source_namespace      = consul_namespace.api.name
@@ -50,5 +42,5 @@ resource "consul_intention" "frontend_public" {
   source_namespace      = consul_namespace.frontend[0].name
   destination_name      = "public"
   destination_namespace = consul_namespace.api.name
-  action                = "deny"
+  action                = "allow"
 }
