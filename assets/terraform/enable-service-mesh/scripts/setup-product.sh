@@ -38,8 +38,8 @@ cat <<-EOF > /etc/consul.d/product-service.json
     "token": "${CONSUL_SERVICE_TOKEN}",
     "check": {
       "id": "api",
-      "name": "api TCP on port 9090",
-      "tcp": "localhost:9090",
+      "name": "api HTTP on port 9090",
+      "http": "http://localhost:9090/coffees",
       "interval": "3s",
       "timeout": "1s"
     },
