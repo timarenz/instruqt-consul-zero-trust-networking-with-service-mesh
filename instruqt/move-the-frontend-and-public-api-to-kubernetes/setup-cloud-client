@@ -1,0 +1,9 @@
+#!/bin/bash
+
+set -e
+
+echo "Deploying public API to Kubernetes..."
+kubectl apply -f /root/terraform/move-the-frontend-and-public-api-to-kubernetes/files/public.yaml
+
+echo "Moving Kubernetes files to root directory"
+mv /root/terraform/move-the-frontend-and-public-api-to-kubernetes/files/frontend.yaml /root/frontend.yaml

@@ -1,0 +1,11 @@
+#!/bin/bash
+
+set -e
+
+cat <<EOF > /root/terraform/user-based-authentication-using-your-existing-identity-platform/terraform.tfvars
+gcp_credentials="/root/terraform/gcp-on-prem-creds.json"
+EOF
+
+cd /root/terraform/user-based-authentication-using-your-existing-identity-platform
+terraform init
+terraform apply -auto-approve

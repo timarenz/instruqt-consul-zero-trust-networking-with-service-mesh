@@ -1,0 +1,50 @@
+#!/bin/bash
+
+set -e
+
+echo "Setting up prereqs..."
+apt-get update -y
+apt-get install software-properties-common -y
+curl -fsSL https://apt.releases.hashicorp.com/gpg | apt-key add -
+apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+
+echo "Installing terraform..."
+apt-get update -y
+apt-get install terraform=0.13.5 -y
+
+echo "Cloning assets..."
+git clone https://github.com/timarenz/instruqt-consul-zero-trust-networking-with-service-mesh
+cp -r instruqt-consul-zero-trust-networking-with-service-mesh/assets/terraform .
+rm -rf instruqt-consul-zero-trust-networking-with-service-mesh
+
+echo "Setting up variables..."
+echo "source /etc/profile.d/instruqt-env.sh" >> /root/.bashrc
+source /root/.bashrc
+
+echo "Running terraform..."
+echo $INSTRUQT_GCP_PROJECT_ON_PREM_SERVICE_ACCOUNT_KEY | base64 -d > /root/terraform/gcp-on-prem-creds.json
+
+cat <<EOF > /root/terraform/introducing-hashicups/terraform.tfvars
+gcp_project="$(echo $INSTRUQT_GCP_PROJECT_ON_PREM_PROJECT_ID)"
+gcp_credentials="/root/terraform/gcp-on-prem-creds.json"
+EOF
+
+cd /root/terraform/introducing-hashicups
+terraform init
+terraform apply -auto-approve
+terraform output -json>output.json
+
+CONSUL_HTTP_ADDR="$(cat output.json | jq -r '.consul_http_addr.value')"
+cat <<EOF > /etc/nginx/conf.d/consul.conf
+server {
+  listen 8500;
+  location / {
+    proxy_pass ${CONSUL_HTTP_ADDR};
+    proxy_set_header X-Real-IP \$remote_addr;
+    proxy_redirect off;
+  }
+  access_log /var/log/nginx/consul.log;
+}
+EOF
+
+/usr/sbin/service nginx restart

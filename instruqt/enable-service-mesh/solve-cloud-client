@@ -1,0 +1,6 @@
+#!/bin/bash
+
+set -e
+
+cd /root/terraform/enable-service-mesh
+terraform apply -auto-approve -var 'solve=true'

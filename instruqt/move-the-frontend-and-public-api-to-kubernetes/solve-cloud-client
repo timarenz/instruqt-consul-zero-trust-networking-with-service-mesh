@@ -1,0 +1,6 @@
+#!/bin/bash
+
+set -e
+
+echo "Deploying frontend to Kubernetes..."
+kubectl apply -f /root/frontend.yaml

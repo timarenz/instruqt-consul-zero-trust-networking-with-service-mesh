@@ -1,0 +1,6 @@
+#!/bin/bash
+
+set -e
+
+cd /root/terraform/move-application-into-the-service-mesh
+terraform apply -auto-approve -var 'solve=true'

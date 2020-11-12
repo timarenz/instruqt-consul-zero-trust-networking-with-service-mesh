@@ -1,0 +1,18 @@
+#!/bin/bash
+
+set -e
+
+echo "Running terraform..."
+echo $INSTRUQT_GCP_PROJECT_CLOUD_SERVICE_ACCOUNT_KEY | base64 -d > /root/terraform/gcp-cloud-creds.json
+
+cat <<EOF > /root/terraform/add-kubernetes-to-the-service-mesh/terraform.tfvars
+gcp_project="$(echo $INSTRUQT_GCP_PROJECT_CLOUD_PROJECT_ID)"
+gcp_credentials="/root/terraform/gcp-cloud-creds.json"
+EOF
+
+cd /root/terraform/add-kubernetes-to-the-service-mesh
+terraform init
+terraform apply -auto-approve
+terraform output -json>output.json
+cp kubeconfig.yaml /root/kubeconfig.yaml
+echo "export KUBECONFIG=/root/kubeconfig.yaml" >> /root/.bashrc

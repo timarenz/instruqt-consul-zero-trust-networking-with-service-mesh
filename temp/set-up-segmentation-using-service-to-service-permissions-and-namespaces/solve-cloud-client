@@ -1,0 +1,6 @@
+#!/bin/bash
+
+set -e
+
+cd /root/terraform/set-up-segmentation-using-service-to-service-permissions-and-namespaces
+terraform apply -auto-approve -var 'solve=true'

@@ -1,0 +1,10 @@
+#!/bin/bash
+
+set -e
+
+cd /root/terraform/move-application-into-the-service-mesh
+terraform apply -auto-approve -var 'solve=true' -var 'default_intention=deny'
+
+cd /root/terraform/set-up-segmentation-using-service-to-service-permissions-and-namespaces
+terraform init
+terraform apply -auto-approve

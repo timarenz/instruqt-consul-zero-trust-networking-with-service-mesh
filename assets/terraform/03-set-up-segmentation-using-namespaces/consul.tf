@@ -29,18 +29,3 @@ resource "consul_intention" "product_db" {
   destination_namespace = consul_namespace.db.name
   action                = "allow"
 }
-
-resource "consul_namespace" "frontend" {
-  count       = var.solve == true ? 1 : 0
-  name        = "frontend-team"
-  description = "Namespace for frontend-team managing the frontend application"
-}
-
-resource "consul_intention" "frontend_public" {
-  count                 = var.solve == true ? 1 : 0
-  source_name           = "frontend"
-  source_namespace      = consul_namespace.frontend[0].name
-  destination_name      = "public"
-  destination_namespace = consul_namespace.api.name
-  action                = "allow"
-}

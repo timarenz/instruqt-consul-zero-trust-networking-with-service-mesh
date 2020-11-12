@@ -1,0 +1,36 @@
+#!/bin/bash
+
+set -e
+
+cd /root/terraform/enable-external-access-to-new-frontend
+terraform init
+terraform apply -auto-approve
+terraform output -json>output.json
+
+head -n 15 /var/www/html/index.html > /var/www/html/target.html
+cat <<EOF >> /var/www/html/target.html
+<div class="account hashicups">
+  <div class="card">
+    <div class="header">
+      <div class="logo">
+        <img alt="icon" src="/assets/hashicorp.png">
+      </div>
+      <div class="title">
+        <h2>cloud</h2>
+        <p>HashiCups</p>
+      </div>
+    </div>
+    <div class="properties">
+      <div class="key">HashiCups URL:</div>
+      <div class="value">
+        <a href="http://$(cat output.json | jq -r '.consul_ingress_gateway_lb_ip.value')"
+          target="_blank">
+          http://$(cat output.json | jq -r '.consul_ingress_gateway_lb_ip.value')
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+EOF
+tail -n +15 /var/www/html/index.html >> /var/www/html/target.html
+mv -f /var/www/html/target.html /var/www/html/index.html

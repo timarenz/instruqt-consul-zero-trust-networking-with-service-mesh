@@ -1,0 +1,21 @@
+version: "2"
+containers:
+- name: cloud-client
+  image: gcr.io/instruqt/cloud-client
+  shell: /bin/bash
+  ports:
+  - 80
+gcp_projects:
+- name: on-prem
+  services:
+  - cloudresourcemanager.googleapis.com
+  - compute.googleapis.com
+  - iam.googleapis.com
+  - serviceusage.googleapis.com
+- name: cloud
+  services:
+  - container.googleapis.com
+  - cloudresourcemanager.googleapis.com
+  - compute.googleapis.com
+  - iam.googleapis.com
+  - serviceusage.googleapis.com
