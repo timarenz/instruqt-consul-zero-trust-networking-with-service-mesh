@@ -21,5 +21,5 @@ resource "consul_intention" "public_to_product" {
 resource "consul_intention" "product_to_postgres" {
   source_name      = "product"
   destination_name = "postgres"
-  action           = "deny"
+  action           = "allow"
 }
