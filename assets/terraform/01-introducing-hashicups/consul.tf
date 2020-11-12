@@ -54,7 +54,7 @@ module "consul_server_cert" {
 
 
 module "consul_server_config" {
-  source                             = "git::https://github.com/timarenz/terraform-ssh-consul.git?ref=v0.6.3"
+  source                             = "git::https://github.com/timarenz/terraform-ssh-consul.git?ref=v0.6.5"
   host                               = module.consul_server.public_ip
   username                           = var.ssh_username
   ssh_private_key                    = tls_private_key.ssh.private_key_pem
