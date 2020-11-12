@@ -1,4 +1,6 @@
-#!/bin/sh
+#!/bin/bash
+
+set -e
 
 check_consul_agent() {
   until (curl http://127.0.0.1:8500/v1/status/leader 2>/dev/null | grep -E '".+"'); do
@@ -28,7 +30,7 @@ RestartSec=30
 WantedBy=multi-user.target
 EOF
 
-echo "Updating product service..."
+echo "Setting up upstreams for product service..."
 cat <<-EOF > /etc/consul.d/product-service.json
 {
   "service": {
@@ -43,7 +45,16 @@ cat <<-EOF > /etc/consul.d/product-service.json
       "interval": "3s",
       "timeout": "1s"
     },
-    "connect": { "sidecar_service": {} }
+    "connect": {
+      "sidecar_service": {
+        "proxy": {
+          "upstreams": [{
+            "destination_name": "postgres",
+            "local_bind_port": 5432
+          }]
+        }
+      }
+    }
   }
 }
 EOF
@@ -54,3 +65,14 @@ check_consul_agent
 
 echo "Enable and start envoy service..."
 systemctl enable envoy && systemctl restart envoy
+
+echo "Updating product configuration to use upstreams..."
+cat <<-EOF > /etc/secrets/db-creds
+{
+"db_connection": "host=localhost port=5432 user=postgres password=password dbname=products sslmode=disable",
+  "bind_address": ":9090",
+  "metrics_address": ":9103"
+}
+EOF
+
+docker restart product

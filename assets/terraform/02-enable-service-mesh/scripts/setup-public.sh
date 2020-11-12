@@ -28,7 +28,7 @@ RestartSec=30
 WantedBy=multi-user.target
 EOF
 
-echo "Updating public service..."
+echo "Setting up upstreams for public service..."
 cat <<-EOF > /etc/consul.d/public-service.json
 {
   "service": {
@@ -43,7 +43,16 @@ cat <<-EOF > /etc/consul.d/public-service.json
       "interval": "3s",
       "timeout": "1s"
     },
-    "connect": { "sidecar_service": {} }
+    "connect": {
+      "sidecar_service": {
+        "proxy": {
+          "upstreams": [{
+            "destination_name": "product",
+            "local_bind_port": 9090
+          }]
+        }
+      }
+    }
   }
 }
 EOF
@@ -54,3 +63,20 @@ check_consul_agent
 
 echo "Enable and start envoy service..."
 systemctl enable envoy && systemctl restart envoy
+
+echo "Updating public configuration to use upstreams..."
+/usr/local/bin/docker-compose -f /opt/public/docker-compose.yml down
+
+cat <<-EOF > /opt/public/docker-compose.yml
+version: '3'
+services:
+  public:
+    container_name: "public"
+    network_mode: "host"
+    environment:
+      BIND_ADDRESS: ":8080"
+      PRODUCT_API_URI: "http://localhost:9090"
+    image: "hashicorpdemoapp/public-api:v0.0.1"
+EOF
+
+/usr/local/bin/docker-compose -f /opt/public/docker-compose.yml up -d
