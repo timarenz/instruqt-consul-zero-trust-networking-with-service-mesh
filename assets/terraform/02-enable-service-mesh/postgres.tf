@@ -6,6 +6,10 @@ resource "null_resource" "postgres_server" {
     host        = data.terraform_remote_state.base.outputs.postgres_server_public_ip
   }
 
+  provisioner "remote-exec" {
+    script = "${path.module}/scripts/install-envoy.sh"
+  }
+
   provisioner "file" {
     source      = "${path.module}/scripts/setup-postgres.sh"
     destination = "setup-postgres.sh"

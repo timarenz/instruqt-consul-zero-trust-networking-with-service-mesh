@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -e
+
 check_consul_agent() {
   until (curl http://127.0.0.1:8500/v1/status/leader 2>/dev/null | grep -E '".+"'); do
     echo "Waiting for Consul agent startup..."
