@@ -20,7 +20,7 @@ module "consul_server" {
   name             = "consul-server"
   subnet           = module.gcp.subnets[0]
   username         = var.ssh_username
-  ssh_public_key   = tls_private_key.ssh.public_key_openssh
+  ssh_public_key   = data.tls_public_key.ssh.public_key_openssh
   network_tags     = [local.consul_server_tag]
   access_scopes = [
     "https://www.googleapis.com/auth/devstorage.read_only",
@@ -57,7 +57,7 @@ module "consul_server_config" {
   source                             = "git::https://github.com/timarenz/terraform-ssh-consul.git?ref=v0.6.5"
   host                               = module.consul_server.public_ip
   username                           = var.ssh_username
-  ssh_private_key                    = tls_private_key.ssh.private_key_pem
+  ssh_private_key                    = data.tls_public_key.ssh.private_key_pem
   retry_join                         = ["provider=gce project_name=${var.gcp_project} tag_value=${local.consul_server_tag} zone_pattern=${var.gcp_region}-.*"]
   connect                            = true
   advertise_addr                     = module.consul_server.private_ip

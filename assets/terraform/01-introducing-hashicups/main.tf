@@ -6,9 +6,13 @@ provider "google" {
 
 data "google_client_config" "client" {}
 
-resource "tls_private_key" "ssh" {
-  algorithm   = "RSA"
-  ecdsa_curve = "4096"
+# resource "tls_private_key" "ssh" {
+#   algorithm   = "RSA"
+#   ecdsa_curve = "4096"
+# }
+
+data "tls_public_key" "ssh" {
+  private_key_pem = file(var.ssh_private_key)
 }
 
 locals {
@@ -17,11 +21,11 @@ locals {
   frontend_server_tag = "frontend-server"
 }
 
-resource "local_file" "ssh" {
-  content         = tls_private_key.ssh.private_key_pem
-  filename        = "${path.module}/ssh.key"
-  file_permission = "0400"
-}
+# resource "local_file" "ssh" {
+#   content         = tls_private_key.ssh.private_key_pem
+#   filename        = "${path.module}/ssh.key"
+#   file_permission = "0400"
+# }
 
 module "gcp" {
   source           = "git::https://github.com/timarenz/terraform-google-environment.git?ref=v0.2.4"

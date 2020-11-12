@@ -26,6 +26,10 @@ variable "ssh_username" {
   default = "consul-admin"
 }
 
+variable "ssh_private_key" {
+  default = "~/.ssh/id_rsa"
+}
+
 variable "consul_primary_dc" {
   default = "on-prem"
 }

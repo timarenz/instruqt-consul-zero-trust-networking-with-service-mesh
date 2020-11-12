@@ -8,7 +8,7 @@ module "product_server" {
   name             = "product-server"
   subnet           = module.gcp.subnets[0]
   username         = var.ssh_username
-  ssh_public_key   = tls_private_key.ssh.public_key_openssh
+  ssh_public_key   = data.tls_public_key.ssh.public_key_openssh
   access_scopes = [
     "https://www.googleapis.com/auth/devstorage.read_only",
     "https://www.googleapis.com/auth/logging.write",
@@ -91,7 +91,7 @@ module "product_server_consul" {
   source             = "git::https://github.com/timarenz/terraform-ssh-consul.git?ref=v0.6.1"
   host               = module.product_server.public_ip
   username           = var.ssh_username
-  ssh_private_key    = tls_private_key.ssh.private_key_pem
+  ssh_private_key    = data.tls_public_key.ssh.private_key_pem
   agent_type         = "client"
   retry_join         = ["provider=gce project_name=${var.gcp_project} tag_value=${local.consul_server_tag} zone_pattern=${var.gcp_region}-.*"]
   advertise_addr     = module.product_server.private_ip
@@ -114,7 +114,7 @@ resource "null_resource" "product_server" {
   connection {
     type        = "ssh"
     user        = var.ssh_username
-    private_key = tls_private_key.ssh.private_key_pem
+    private_key = data.tls_public_key.ssh.private_key_pem
     host        = module.product_server.public_ip
   }
 
