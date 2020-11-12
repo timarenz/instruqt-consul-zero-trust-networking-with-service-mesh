@@ -2,7 +2,7 @@ data "terraform_remote_state" "base" {
   backend = "local"
 
   config = {
-    path = "../introducing-hashicups/terraform.tfstate"
+    path = "../01-introducing-hashicups/terraform.tfstate"
   }
 }
 
@@ -10,7 +10,7 @@ data "terraform_remote_state" "k8s" {
   backend = "local"
 
   config = {
-    path = "../add-kubernetes-to-the-service-mesh/terraform.tfstate"
+    path = "../06-add-kubernetes-to-the-service-mesh/terraform.tfstate"
   }
 }
 
