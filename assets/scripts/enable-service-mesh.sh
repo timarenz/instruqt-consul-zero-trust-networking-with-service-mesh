@@ -1,7 +1,5 @@
 #!/bin/sh
 
-set -e
-
 echo "Connecting to frontend-server and replacing the configuration files...."
 echo
 ssh consul-admin@frontend-server sudo cp /etc/consul.d/frontend-service.json.example /etc/consul.d/frontend-service.json

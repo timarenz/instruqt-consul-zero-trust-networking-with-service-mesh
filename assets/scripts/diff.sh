@@ -1,7 +1,5 @@
 #!/bin/sh
 
-set -e
-
 echo "Connecting to frontend-server and reading diffs from configuration files..."
 echo
 # echo "On the left hand side you see the current Consul service configuration for the frontend services."

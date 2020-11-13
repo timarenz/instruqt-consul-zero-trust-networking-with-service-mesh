@@ -1,7 +1,5 @@
 #!/bin/sh
 
-set -e
-
 echo "Connecting to postgres-server and start sniffing traffic..."
 # echo
 # echo "Below you see that currently the postgres-services is listening on 0.0.0.0:5432. So anyone in the network can access this services."
