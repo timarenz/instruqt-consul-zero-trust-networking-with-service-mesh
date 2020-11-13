@@ -60,7 +60,7 @@ cat <<-EOF > /opt/oidc/config/users.json
   },
   {
     "id": "SIMPLE_OIDC_USER_TIM",
-    "email": "tim@hashicorp.examplei",
+    "email": "tim@hashicorp.example",
     "email_verified": true,
     "name": "tim",
     "nickname": "tim",
@@ -69,7 +69,7 @@ cat <<-EOF > /opt/oidc/config/users.json
   },
   {
     "id": "SIMPLE_OIDC_USER_TIM",
-    "email": "patrick@hashicorp.examplei",
+    "email": "patrick@hashicorp.example",
     "email_verified": true,
     "name": "patrick",
     "nickname": "patrick",

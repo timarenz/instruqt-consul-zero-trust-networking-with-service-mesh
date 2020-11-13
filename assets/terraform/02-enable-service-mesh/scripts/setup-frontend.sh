@@ -40,8 +40,8 @@ cat <<-EOF > /etc/consul.d/frontend-service.json
     "token": "${CONSUL_SERVICE_TOKEN}",
     "check": {
       "id": "web",
-      "name": "web TCP on port 80",
-      "tcp": "localhost:80",
+      "name": "web HTTP on port 80",
+      "http": "http://localhost:80",
       "interval": "3s",
       "timeout": "1s"
     }
@@ -90,8 +90,8 @@ cat <<-EOF > /etc/consul.d/frontend-service.json.example
     "token": "${CONSUL_SERVICE_TOKEN}",
     "check": {
       "id": "web",
-      "name": "web TCP on port 80",
-      "tcp": "localhost:80",
+      "name": "web HTTP on port 80",
+      "http": "http://localhost:80",
       "interval": "3s",
       "timeout": "1s"
     },
