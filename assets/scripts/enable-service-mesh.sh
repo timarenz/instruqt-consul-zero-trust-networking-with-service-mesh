@@ -2,9 +2,7 @@
 
 set -e
 
-echo "Connecting to frontend-server..."
-echo
-echo "Now we replace the old with the new file."
+echo "Connecting to frontend-server and replacing the configuration files...."
 echo
 ssh consul-admin@frontend-server sudo cp /etc/consul.d/frontend-service.json.example /etc/consul.d/frontend-service.json
 ssh consul-admin@frontend-server sudo cp /etc/nginx/conf.d/default.conf.example /etc/nginx/conf.d/default.conf
