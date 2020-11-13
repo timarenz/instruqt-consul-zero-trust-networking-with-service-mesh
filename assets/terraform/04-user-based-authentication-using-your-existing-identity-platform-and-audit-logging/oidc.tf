@@ -205,11 +205,7 @@ resource "consul_acl_policy" "db_team" {
   depends_on = [null_resource.oidc_server]
   name       = "db-team"
   rules      = <<-RULE
-    service_prefix "" {
-        policy = "read"
-    }
-
-    node_prefix "" {
+    node "postgres-server" {
         policy = "read"
     }
 
@@ -235,11 +231,11 @@ resource "consul_acl_policy" "api_team" {
   depends_on = [null_resource.oidc_server]
   name       = "api-team"
   rules      = <<-RULE
-    service_prefix "" {
+    node "public-server" {
         policy = "read"
     }
 
-    node_prefix "" {
+    node "product-server" {
         policy = "read"
     }
 
@@ -265,11 +261,7 @@ resource "consul_acl_policy" "frontend_team" {
   depends_on = [null_resource.oidc_server]
   name       = "frontend-team"
   rules      = <<-RULE
-    service_prefix "" {
-        policy = "read"
-    }
-
-    node_prefix "" {
+    node "frontend-server" {
         policy = "read"
     }
 
